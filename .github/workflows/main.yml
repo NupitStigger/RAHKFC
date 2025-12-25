@@ -1,0 +1,27 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ] # Кодты main-ге жібергенде іске қосылады
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Кодты көшіріп алу
+        uses: actions/checkout@v3
+
+      - name: Тест жасау (Unit Test)
+        run: |
+          echo "Тесттер орындалып жатыр..."
+          # Осы жерге тест командасын жазасыз (мысалы: pytest)
+
+      - name: Docker бейнесін жинау (Build)
+        run: docker build -t my-app:latest .
+
+      - name: Қауіпсіздікті тексеру (Trivy Scan)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'my-app:latest'
+          format: 'table'
+          exit-code: '0' # Қате тапса да тоқтамау үшін (үйрену барысында)
